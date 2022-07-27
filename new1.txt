@@ -1,0 +1,91 @@
+package jdbc_connection;
+import java.sql.*;
+import java.util.*;
+
+public class Jdbc_001 
+{
+
+static Connection con=null;
+static Statement st=null;
+static ResultSet rs=null;
+
+static void connectToDB()
+{
+try
+{  
+Class.forName("com.mysql.cj.jdbc.Driver");  
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/student","root","Root123@");  
+System.out.println("Database Connected  ");
+st=con.createStatement();
+}
+catch(Exception e)
+{ 
+System.out.println(e);
+}  
+}
+
+public static void main(String[] args) 
+{
+int rollno=0;
+int choice;
+String name="",add="",city="";
+
+do
+{
+Scanner sc = new Scanner(System.in);	
+System.out.println("\n\nPress 1 to Insert ");
+System.out.println("Press 2 to Select ");
+System.out.println("Press 3 to Delete ");
+System.out.println("Press 4 to Update ");
+System.out.println("Press 5 to Exit ");
+choice=sc.nextInt();
+switch(choice)
+{
+case 1:	System.out.println("Enter Rollno:");
+rollno=sc.nextInt();
+sc=new Scanner(System.in);
+System.out.println("Enter Name:");
+name=sc.nextLine();
+System.out.println("Enter Address:");
+add=sc.nextLine();
+System.out.println("Enter City:");
+city=sc.nextLine();
+connectToDB();
+try 
+{
+st.executeUpdate("insert into student_tb values("+rollno+",'"+name+"','"+add+"','"+city+"')");
+System.out.println("Record Insert Successfully ");
+}
+catch(SQLException e)
+{
+
+}
+break;
+
+case 2: connectToDB();
+try 
+{
+rs=st.executeQuery("select * from student_tb");
+while(rs.next())
+{
+System.out.println("\n\nRoll NO : "+rs.getString("rollno"));
+System.out.println("Name : "+rs.getString("name"));
+System.out.println("Address : "+rs.getString("address"));
+System.out.println("City : "+rs.getString("city"));
+}
+}
+catch(Exception e) 
+{
+
+}
+break;
+
+case 3:
+break;
+
+case 4:
+break;
+}
+}while(choice<5);
+}
+}
